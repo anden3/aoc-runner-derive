@@ -15,7 +15,6 @@ mod types;
 mod utils;
 
 use crate::map::Map;
-use crate::utils::is_rls;
 use proc_macro as pm;
 use proc_macro2 as pm2;
 use quote::quote;
@@ -47,14 +46,6 @@ thread_local! {
 ///
 /// [generator]: attr.aoc_generator.html
 pub fn aoc(args: pm::TokenStream, input: pm::TokenStream) -> pm::TokenStream {
-    if is_rls() {
-        let input: pm2::TokenStream = input.into();
-        return pm::TokenStream::from(quote! {
-            #[allow(unused)]
-            #input
-        });
-    }
-
     runner::runner_impl(args, input)
 }
 
@@ -85,14 +76,6 @@ pub fn aoc(args: pm::TokenStream, input: pm::TokenStream) -> pm::TokenStream {
 /// A generator must be declared before it's solutions.
 ///
 pub fn aoc_generator(args: pm::TokenStream, input: pm::TokenStream) -> pm::TokenStream {
-    if is_rls() {
-        let input: pm2::TokenStream = input.into();
-        return pm::TokenStream::from(quote! {
-            #[allow(unused)]
-            #input
-        });
-    }
-
     generator::generator_impl(args, input)
 }
 
@@ -104,10 +87,6 @@ pub fn aoc_generator(args: pm::TokenStream, input: pm::TokenStream) -> pm::Token
 /// ## Usage
 /// `aoc_lib! { year = 2018 }`
 pub fn aoc_lib(input: pm::TokenStream) -> pm::TokenStream {
-    if is_rls() {
-        return pm::TokenStream::new();
-    }
-
     out::lib_impl(input)
 }
 
@@ -121,9 +100,5 @@ pub fn aoc_lib(input: pm::TokenStream) -> pm::TokenStream {
 ///  - as a standalone binary : `aoc_main! { year = 2018 }`
 ///  - as a link to a library : `aoc_main! { lib = advent_of_code_2018 }` (you must had `extern crate advent_of_code_2018;` before)
 pub fn aoc_main(input: pm::TokenStream) -> pm::TokenStream {
-    if is_rls() {
-        return pm::TokenStream::from(quote! { fn main() {} });
-    }
-
     out::main_impl(input)
 }
