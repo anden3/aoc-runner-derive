@@ -16,8 +16,6 @@ mod utils;
 
 use crate::map::Map;
 use proc_macro as pm;
-use proc_macro2 as pm2;
-use quote::quote;
 
 thread_local! {
     static AOC_RUNNER: Map = Map::new();
